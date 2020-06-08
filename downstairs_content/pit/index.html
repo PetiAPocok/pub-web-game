@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    	<title>Mland - Gödör</title>
+    	<meta charset="utf-8" />
+        <style>
+            body{
+                padding: 0px;
+                background-image: url("table.png");
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+
+            #back{
+                position: absolute;
+                top: 4vh;
+                left: 2vw;
+                width: 200px;
+            }
+
+            #menu{
+                display: block;
+                width: 200px;
+                background-color: rgba(255, 200, 100, 1);
+                border-radius: 10px;
+                border-style: solid;
+                text-align: center;
+                padding: 5px;
+                margin: auto;
+                margin-top: 5vh;
+            }
+
+            #end_menu{
+                display: none;
+                width: 200px;
+                background-color: rgba(255, 200, 100, 1);
+                border-radius: 10px;
+                border-style: solid;
+                text-align: center;
+                padding: 5px;
+                margin: auto;
+                margin-top: 5vh;
+            }
+
+            .cover{
+                display: none;
+                position: absolute;
+                z-index: 1;
+            }
+
+            #cover_1{
+                width: 99vw;
+                height: 70vh;
+                left: 0px;
+                top: 30vh;
+            }
+
+            #cover_2{
+                width: 30vw;
+                height: 100vh;
+                right: 0px;
+                top: 0px;
+            }
+
+            #board{
+                display: none;
+                width: 90vh;
+                height: 90vh;
+                position: relative;
+                margin: auto;
+                margin-top: 5vh;
+            }
+
+            #pit{
+                min-height: 150px;
+                min-width: 100px;
+                height: 23vh;
+                width: 8vw;
+                padding: 5px;
+                border-radius: 10px;
+                position: absolute;
+                top: 38%;
+                left: 42%;
+                background-color: rgba(100, 100, 100, 1);
+            }
+
+
+            #deck{
+                position: absolute;
+                width: inherit;
+                height: inherit;
+            }
+
+            .card_back{
+                width: 15%;
+                position: absolute;
+            }
+
+            .card_in_player_hand{
+                display: inline;
+                height: 22vh;
+                width: 15vh;
+                margin-right: -10%;
+            }
+
+            .card_in_enemy_hand{
+                display: inline;
+                height: 12vh;
+                width: 9vh;
+                margin-right: -10%;
+            }
+
+            .card_in_pit{
+                display: block;
+                position: absolute;
+                min-height: 150px;
+                min-width: 100px;
+                height: 23vh;
+                width: 8vw;
+            }
+
+            #enemy{
+                max-width: 22vw;
+                position: absolute;
+                top: 17vh;
+                left: 5vw;
+            }
+
+            #player{
+                max-width: 22vw;
+                position: absolute;
+                top: 5vh;
+                right: 5vw;
+            }
+        </style>
+    </head>
+
+    <body>
+        <a href="../.."><img id="back" src="exit.png" /></a>
+
+        <section id="menu">
+            <h3>Gödör</h3>
+            <h2 id="help" onmouseover="show_help()">?</h2>
+            <button onclick="let_the_fun_begin()" />START!</button>
+        </section>
+
+        <section id="end_menu">
+            <h3 id="end_text"></h3>
+            <button onclick="let_the_fun_begin()" />Megint!</button>
+        </section>
+        <div class="cover" id="cover_1"></div>
+        <div class="cover" id="cover_2"></div>
+
+        <section id="board">
+            <!-- 52 -->
+            <section id="deck"></section>
+            <div id="pit" class="card_place"></div>
+        </section>
+        <section id="enemy"></section>
+        <section id="player"></section>
+
+        <script>
+            let cards = [];
+            let is_deck_empty;
+            let last_player = "E";
+            let pit_child_list;
+            let deck_child_list;
+            let enemys_loop;
+
+            function let_the_fun_begin(){
+                document.getElementById("menu").style.display = "none";
+                document.getElementById("end_menu").style.display = "none";
+                document.getElementById("cover_1").style.display = "none";
+                document.getElementById("cover_2").style.display = "none";
+                document.getElementById("board").style.display = "block";
+                let clearIt = document.getElementById("enemy").childNodes;
+                for (let i = 0; i < clearIt.length; i++) {
+                    document.getElementById("enemy").removeChild(clearIt[i]);
+                }
+
+                clearIt = document.getElementById("player").childNodes;
+                for (let i = 0; i < clearIt.length; i++) {
+                    document.getElementById("player").removeChild(clearIt[i]);
+                }
+
+                clearIt = document.getElementById("pit").childNodes;
+                for (let i = 0; i < clearIt.length; i++) {
+                    document.getElementById("pit").removeChild(clearIt[i]);
+                }
+                generate_cards();
+            }
+
+            function generate_cards(){
+                let pos_center_x = 0;
+                let pos_center_y = 0;
+                let card_rotate_value = 90;
+                let rotate_value_in_deg = 0;
+                let pos_x = 0;
+                let pos_y = 0;
+                let rand_gen_i = 0;
+                let random_numbers = [];
+
+                for (let i = 0; i < 52; i++) {          //Draw the 52 cards
+                    let img_node = document.createElement("IMG");
+
+                    img_node.setAttribute("src", "cards/back.png");
+                    img_node.setAttribute("class", "card_back");
+                    img_node.setAttribute("id", i);
+                    img_node.setAttribute("onclick", "deck_pick_up(id)");
+                    document.getElementById("deck").appendChild(img_node);
+
+                    pos_center_x = document.getElementById("pit").offsetLeft;
+                    pos_center_y = document.getElementById("pit").offsetTop;
+                    rotate_value_in_deg = (i * 6.9231) * (Math.PI / 180);
+                    //pos point = r *sin(degrees in rad)
+                    pos_x = 250 * Math.sin(rotate_value_in_deg);
+                    pos_y = 250 * Math.cos(rotate_value_in_deg);
+                    document.getElementById(i).style.left = (pos_center_x + pos_x) + "px";
+                    document.getElementById(i).style.top = (pos_center_y + pos_y) + "px";
+
+                    card_rotate_value -= 6.9231;
+                    document.getElementById(i).style.transform = "rotate(" + card_rotate_value + "deg)";
+                }
+
+                while (rand_gen_i < 52) {                        //Generate the random 54 cards
+                    let random_number = Math.floor((Math.random() * 52) + 1);
+                    if (!random_numbers.includes(random_number)) {
+                        random_numbers[rand_gen_i] = random_number;
+                        rand_gen_i++;
+                    }
+                }
+
+                for (let i = 0; i < random_numbers.length; i++) {
+                    if (random_numbers[i] < 14) {
+                        cards[i] = "A" + random_numbers[i];
+                    }else if (random_numbers[i] < 27) {
+                        cards[i] = "B" + (random_numbers[i] - 13);
+                    }else if (random_numbers[i] < 40) {
+                        cards[i] = "M" + (random_numbers[i] - 26);
+                    }else if (random_numbers[i] < 53) {
+                        cards[i] = "O" + (random_numbers[i] - 39);
+                    }
+                }
+                is_deck_empty = false;
+
+                let random_card_id = Math.floor((Math.random() * 52) + 1);
+                let random_card = document.getElementById("deck").childNodes[random_card_id];
+                random_card.removeAttribute("style");
+                random_card.setAttribute("class", "card_in_pit");
+                random_card.setAttribute("onclick", "pit_pick_up(id)");
+                random_card.setAttribute("src", "cards/" + cards[random_card_id] + ".png");
+                document.getElementById("pit").appendChild(random_card);
+            }
+
+            function deck_pick_up(id){
+                if (last_player == "E") {
+                    deck_child_list = document.getElementById("deck").childNodes;
+                    let picked_card;
+
+                    for (let i = 0; i < deck_child_list.length; i++) {
+                        if (id == deck_child_list[i].id) {
+                            picked_card = deck_child_list[i];
+                        }
+                    }
+
+                    document.getElementById("deck").removeChild(picked_card);
+                    picked_card.removeAttribute("style");
+                    picked_card.setAttribute("class", "card_in_player_hand");
+                    picked_card.setAttribute("onclick", "put_down(id)");
+                    picked_card.setAttribute("src", "cards/" + cards[id] + ".png");
+                    document.getElementById("player").appendChild(picked_card);
+                    resize_cards_in_hand("player");
+
+                    if (deck_child_list.length < 1) {
+                        is_deck_empty = true;
+                    }
+                }
+            }
+
+            function pit_pick_up(id){
+                if (last_player == "E") {
+                    if (is_deck_empty) {
+                        pit_child_list = document.getElementById("pit").childNodes;
+                        let picked_card;
+
+                        for (let i = 0; i < pit_child_list.length; i++) {
+                            if (id == pit_child_list[i].id) {
+                                picked_card = pit_child_list[i];
+                            }
+                        }
+
+                        document.getElementById("pit").removeChild(picked_card);
+                        picked_card.removeAttribute("style");
+                        picked_card.setAttribute("class", "card_in_player_hand");
+                        picked_card.setAttribute("onclick", "put_down(id)");
+                        document.getElementById("player").appendChild(picked_card);
+                        resize_cards_in_hand("player");
+
+                        last_player = "P";
+                        setTimeout(function() { enemys_loop = setInterval(enemys_put_down, 1000)}, 1000);
+                    }
+                }
+            }
+
+            function put_down(id){
+                if (last_player == "E") {
+                    pit_child_list = document.getElementById("pit").childNodes;
+                    let pit_top_element = pit_child_list[pit_child_list.length - 1];
+                    let pit_top_card_color;
+                    let pit_top_card_number;
+                    let hand_child_list = document.getElementById("player").childNodes;
+                    let down_card_path = document.getElementById(id).src;
+                    let down_card_file = down_card_path.slice(down_card_path.lastIndexOf("/") + 1);
+                    let down_card_color = down_card_file.slice(0,1);
+                    let down_card_number = down_card_file.slice(1).replace(".png", "");
+                    let picked_card;
+
+                    if (pit_top_element != undefined) {
+                        let pit_top_card_path = pit_top_element.src;
+                        let pit_top_card_file = pit_top_card_path.slice(pit_top_card_path.lastIndexOf("/") + 1);
+                        pit_top_card_color = pit_top_card_file.slice(0,1);
+                        pit_top_card_number = pit_top_card_file.slice(1).replace(".png", "");
+                    }
+
+                    if (pit_top_element == undefined || pit_top_card_color == down_card_color || pit_top_card_number == down_card_number) {
+                        for (let i = 0; i < hand_child_list.length; i++) {
+                            if (id == hand_child_list[i].id) {
+                                picked_card = hand_child_list[i];
+                            }
+                        }
+
+                        document.getElementById("player").removeChild(picked_card);
+                        picked_card.removeAttribute("style");
+                        picked_card.setAttribute("class", "card_in_pit");
+                        picked_card.setAttribute("onclick", "pit_pick_up(id)");
+                        document.getElementById("pit").appendChild(picked_card);
+                        last_player = "P";
+                        if (!check_game_end()) {
+                            enemys_loop = setInterval(enemys_put_down, 1000);
+                        }
+                    }
+                }
+            }
+
+            function enemys_put_down(){
+                if (last_player == "P") {
+                    let pit_top_element = pit_child_list[pit_child_list.length - 1];
+                    let pit_top_card_color;
+                    let pit_top_card_number;
+                    let hand_child_list = document.getElementById("enemy").childNodes;
+                    let picked_card;
+                    let down_card_id;
+
+                    let i = 0;
+                    while (picked_card == undefined && i < hand_child_list.length) {
+                        down_card_id = hand_child_list[i].id;
+                        let down_card_color = cards[down_card_id].slice(0,1);
+                        let down_card_number = cards[down_card_id].slice(1);
+
+                        if (pit_top_element != undefined) {
+                            let pit_top_card_path = pit_top_element.src;
+                            let pit_top_card_file = pit_top_card_path.slice(pit_top_card_path.lastIndexOf("/") + 1);
+                            pit_top_card_color = pit_top_card_file.slice(0,1);
+                            pit_top_card_number = pit_top_card_file.slice(1).replace(".png", "");
+
+                            if (pit_top_card_color == down_card_color || pit_top_card_number == down_card_number) {
+                                picked_card = hand_child_list[i];
+                                down_card_id = hand_child_list[i].id;
+                            }else {
+                                i++;
+                            }
+                        } else {
+                            picked_card = hand_child_list[0];
+                        }
+                    }
+                    if (picked_card == undefined && i >= hand_child_list.length) {
+                        enemys_pick_up();
+                    }
+
+
+                    if (last_player == "P" && picked_card != undefined) {
+                        document.getElementById("enemy").removeChild(picked_card);
+                        picked_card.removeAttribute("style");
+                        picked_card.setAttribute("class", "card_in_pit");
+                        picked_card.setAttribute("onclick", "pit_pick_up(id)");
+                        picked_card.setAttribute("src", "cards/" + cards[down_card_id] + ".png");
+                        document.getElementById("pit").appendChild(picked_card);
+                        clearInterval(enemys_loop);
+                        last_player = "E";
+                        check_game_end();
+                    }
+                }
+            }
+
+            function enemys_pick_up(){
+                if (last_player == "P") {
+                    pit_child_list = document.getElementById("pit").childNodes;
+                    deck_child_list = document.getElementById("deck").childNodes;
+                    let picked_card;
+
+                    if (deck_child_list.length < 1) {
+                        is_deck_empty = true;
+                    }
+
+                    if (is_deck_empty) {
+                        picked_card = pit_child_list[pit_child_list.length - 1];
+                        document.getElementById("pit").removeChild(picked_card);
+                        last_player = "E";
+                        picked_card.setAttribute("src", "cards/back.png"); //<= Hide the card picked up from the pit
+                    } else {
+                        let deck_child_ids = [];
+                        let random_number = Math.floor((Math.random() * 51) + 1);
+
+                        for (var i = 0; i < deck_child_list.length; i++) {
+                            deck_child_ids[i] = parseInt(deck_child_list[i].id);
+                        }
+
+                        while (!deck_child_ids.includes(random_number)) {
+                            random_number = Math.floor(Math.random() * 52);
+                        }
+
+                        picked_card = document.getElementById(random_number);
+                        document.getElementById("deck").removeChild(picked_card);
+                        //picked_card.setAttribute("src", "cards/" + cards[random_number] + ".png"); //<=show enemy's cards
+                    }
+
+                    picked_card.removeAttribute("style");
+                    picked_card.removeAttribute("onclick");
+                    picked_card.setAttribute("class", "card_in_enemy_hand");
+                    document.getElementById("enemy").appendChild(picked_card);
+
+                    if (deck_child_list.length < 1) {
+                        is_deck_empty = true;
+                    }
+                }
+            }
+
+            function check_game_end(){
+                if (is_deck_empty) {
+                    let enemys_cards = document.getElementById("enemy").childNodes.length;
+                    let players_cards = document.getElementById("player").childNodes.length;
+
+                    if (enemys_cards < 1 || players_cards < 1) {
+                        document.getElementById("end_menu").style.display = "block";
+                        document.getElementById("cover_1").style.display = "block";
+                        document.getElementById("cover_2").style.display = "block";
+                        if (enemys_cards < 1){
+                            document.getElementById("end_text").innerHTML = "Kikaptál.";
+                        } else if (players_cards < 1) {
+                            document.getElementById("end_text").innerHTML = "Oh, micsoda győzelem ez, mely a tiéd.";
+                        }
+
+                        return true;
+                    }else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            }
+
+            function resize_cards_in_hand(){
+                let cards_in_hand = document.getElementById("player").childNodes.length;
+                let cards_class = document.getElementsByClassName("card_in_player_hand");
+
+                if (cards_in_hand > 42) {
+                    for (var i = 0; i < cards_class.length; i++) {
+                        cards_class[i].style.height = "12vh";
+                        cards_class[i].style.width = "10vh";
+                    }
+                } else if (cards_in_hand > 30) {
+                    for (var i = 0; i < cards_class.length; i++) {
+                        cards_class[i].style.height = "14vh";
+                        cards_class[i].style.width = "11vh";
+                    }
+                } else if (cards_in_hand > 25) {
+                    for (var i = 0; i < cards_class.length; i++) {
+                        cards_class[i].style.height = "16vh";
+                        cards_class[i].style.width = "12vh";
+                    }
+                } else if (cards_in_hand > 20) {
+                    for (var i = 0; i < cards_class.length; i++) {
+                        cards_class[i].style.height = "18vh";
+                        cards_class[i].style.width = "13vh";
+                    }
+                } else if (cards_in_hand > 16) {
+                        for (var i = 0; i < cards_class.length; i++) {
+                            cards_class[i].style.height = "20vh";
+                            cards_class[i].style.width = "14vh";
+                        }
+                }
+            }
+
+            function show_help(){
+                document.getElementById("help").title = "A játék lényege, hogy kör közepén lévő lapra\n" +
+                                                        "azonos színűt vagy számút kell rakni.\n" +
+                                                        "A lapokat a körből kell felúzni.\n" +
+                                                        "A játék addig tart amíg el nem fogy a kör\n" +
+                                                        "és valamelyik játékos kezéből a lap.\n" +
+                                                        "Ha nem tudunk megfelelő lapot lerakni\n" +
+                                                        "és a kör is elfogyott, akkor a legfelső lapot\n" +
+                                                        "kell felhúznunk és az ellenfél következik.\n";
+            }
+        </script>
+    </body>
+</html>

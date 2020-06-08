@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Pub-fun</title>
+        <style>
+            body{
+                background: black;
+                text-align: center;
+                margin: 0px;
+                padding: 0px;
+            }
+
+            #main_container{
+                position: relative;
+                margin: 0px;
+                padding: 0px;
+            }
+
+            #bg{
+                z-index: -10;
+                width: 99vw;
+            }
+
+            #frog{
+                position: absolute;
+                right: 14%;
+                top: 38.4%;
+                width: 9%;
+            }
+
+            #old_guy_john{
+                position: absolute;
+                right: 1%;
+                top: 37.4%;
+                width: 7.5%;
+            }
+
+            #stairs{
+                position: absolute;
+                left: 58%;
+                top: 16%;
+                width: 7.5%;
+            }
+
+            #stockpile{
+                position: absolute;
+                left: 65.4%;
+                top: 23.4%;
+                width: 10.2%;
+            }
+
+            #bartender{
+                position: absolute;
+                left: 28%;
+                top: 16.4%;
+                width: 23%;
+            }
+
+           #atika{
+                position: absolute;
+                right: 1%;
+                top: 32%;
+                width: 15%;
+                z-index: 0;
+            }
+
+            #desk1{
+                position: absolute;
+                right: 0%;
+                bottom: 0.3%;
+                width: 39%;
+                z-index: 2;
+            }
+
+            #desk2{
+                position: absolute;
+                right: 0%;
+                top: 57%;
+                width: 39%;
+                z-index: 1;
+            }
+
+            #dice_game{
+                position: absolute;
+                right: 0%;
+                bottom: 0.4%;
+                width: 40%;
+                z-index: 3;
+            }
+
+            #pit{
+                position: absolute;
+                left: 0%;
+                bottom: 0%;
+                width: 23%;
+            }
+
+            #rat{
+                position: absolute;
+                left: 16.4%;
+                top: 52%;
+                width: 12%;
+            }
+
+        </style>
+
+    </head>
+
+    <body>
+        <div id="main_container">
+            <img id="bg" src="downstairs_resources/downstairs.png" />
+
+            <a href="downstairs_content/memory/"><img id="frog" src="downstairs_resources/frog.png" onmouseover='src="downstairs_resources/frog_alt.png"' onmouseout='src="downstairs_resources/frog.png"' /></a>
+
+            <img id="old_guy_john" src="downstairs_resources/old_guy_john.png" />
+
+            <a href="stockpile/"><img id="stockpile" src="downstairs_resources/stockpile.png" onmouseover='src="downstairs_resources/stockpile_alt.png"' onmouseout='src="downstairs_resources/stockpile.png"' /></a>
+
+            <img id="rat" src="downstairs_resources/rat.png" />
+
+            <a href="upstairs/"><img id="stairs" src="downstairs_resources/stairs.png" onmouseover='src="downstairs_resources/stairs_l.png"' onmouseout='src="downstairs_resources/stairs.png"' /></a>
+
+            <a href="#"><img id="bartender" src="downstairs_resources/bartender.png" onmouseover='src="downstairs_resources/bartender_alt.png"' onmouseout='src="downstairs_resources/bartender.png"' /></a>
+
+            <img id="desk2" src="downstairs_resources/desk2.png" />
+
+            <a href="downstairs_content/Atika.jpg"><img id="atika" src="downstairs_resources/Atika.png" onmouseover='src="downstairs_resources/Atika.gif"' onmouseout='src="downstairs_resources/Atika.png"' /></a>
+
+            <img id="desk1" src="downstairs_resources/desk1.png" />
+
+            <a href="downstairs_content/dice/"><img id="dice_game" src="downstairs_resources/ork_guy.png" onmouseover='src="downstairs_resources/ork_guy_alt.png"' onmouseout='src="downstairs_resources/ork_guy.png"' /></a>
+
+            <a href="downstairs_content/pit/"><img id="pit" src="downstairs_resources/ork_snake.png" onmouseover='src="downstairs_resources/ork_snake_alt.png"' onmouseout='src="downstairs_resources/ork_snake.png"' /></a>
+        </div>
+    </body>
+</html>

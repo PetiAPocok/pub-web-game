@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Mgame</title>
+        <style>
+            body{
+                font-size: 16px;
+                font-weight: bold;
+                padding: 0px;
+                margin: 0px;
+            }
+
+            #bg{
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                z-index: -10;
+                width: 99vw;
+            }
+
+            #back{
+                width: 11vw;
+                position: absolute;
+                top: 3%;
+                left: 2%;
+            }
+
+            #help{
+                position: absolute;
+                top: 3%;
+                right: 3%;
+                font-size: 400%;
+            }
+
+            #roll_button{
+                position: absolute;
+                bottom: 5%;
+                right: 3%;
+            }
+
+            img{
+                width: 9vw;
+            }
+
+            #enemy{
+                display: none;
+                width: 99vw;
+                position: absolute;
+                top: 15vh;
+                z-index: -1;
+            }
+
+            #user{
+                display: none;
+                width: 99vw;
+                z-index: -2;
+                position: absolute;
+                bottom: 10%;
+            }
+
+            .dice{
+                margin: auto;
+                z-index: -1;
+            }
+
+            #dice_area{
+                display: none;
+                z-index: -1;
+            }
+
+            #menu{
+                display: table;
+                background-color: rgba(150, 150, 150, 1);
+                border-style: solid;
+                border-color: rgba(1,1,1,1);
+                border-width: 3px;
+                border-radius: 15px;
+                padding: 5px;
+                margin: auto;
+                margin-top: 50px;
+                text-align: center;
+            }
+        </style>
+    </head>
+
+    <body>
+        <img id="bg" src="table.png" />
+
+        <a href="../.."><img id="back" src="exit.png" /></a>
+
+        <section id="menu">
+            <article id="winner">
+                <h3>Kockapóker</h3>
+                <p>
+                    A felső sor kocka az ellenfélé.<br />
+                    Az alsó sor a tied. A nagyobb dobás nyer.<br />
+                    Kérdőjelben segítség. 3 dobásod van.</p>
+            </article>
+            <button onclick="let_the_fun_begin()">Start!</button>
+            <!--
+            <input type="range" name="" value="" min="10" max="100" />
+            -->
+        </section>
+
+        <section id="dice_area">
+            <section id="help" onmouseover="show_help()">?</section>
+
+            <button id="roll_button" onclick="roll_user()">Dob!</button>
+
+            <section id="enemy">
+                <img class="dice" id="E0" src="1.png" />
+                <img class="dice" id="E1" src="1.png" />
+                <img class="dice" id="E2" src="1.png" />
+                <img class="dice" id="E3" src="1.png" />
+                <img class="dice" id="E4" src="1.png" />
+            </section>
+
+            <section id="user">
+                <img class="dice" id="0" src="1.png" onclick="select_for_reroll(id)" />
+                <img class="dice" id="1" src="1.png" onclick="select_for_reroll(id)" />
+                <img class="dice" id="2" src="1.png" onclick="select_for_reroll(id)" />
+                <img class="dice" id="3" src="1.png" onclick="select_for_reroll(id)" />
+                <img class="dice" id="4" src="1.png" onclick="select_for_reroll(id)" />
+            </section>
+        </section>
+
+        <script>
+            var users_roll = [];
+            var users_roll_again = [1,1,1,1,1];
+            var users_score = 0;
+            var enemys_roll = [];
+            var enemys_roll_again = [1,1,1,1,1];
+            var enemys_score = 0;
+            var rolls = 0;
+
+            function let_the_fun_begin(){
+                document.getElementById("menu").style.display = "none";
+                document.getElementById("roll_button").style.display = "block";
+                document.getElementById("dice_area").style.display = "block";
+                document.getElementById("enemy").style.display = "none";
+                document.getElementById("user").style.display = "none";
+                document.getElementById("roll_button").innerHTML = "Dob!";
+                users_roll = [];
+                users_roll_again = [1,1,1,1,1];
+                users_score = 0;
+                enemys_roll = [];
+                enemys_roll_again = [1,1,1,1,1];
+                enemys_score = 0;
+                rolls = 0;
+            }
+
+            function count_score(player){
+                var has_pair = false;
+                var pair;
+                var has_drill = false;
+                var drill;
+                var side_count = [0, 0, 0, 0, 0, 0];
+                var score = 0;
+
+                for (var i = 0; i < player.length; i++) {
+                    switch (player[i]) {
+                        case 1:
+                            side_count[0]++;
+                            break;
+
+                        case 2:
+                            side_count[1]++;
+                            break;
+
+                        case 3:
+                            side_count[2]++;
+                            break;
+
+                        case 4:
+                            side_count[3]++;
+                            break;
+
+                        case 5:
+                            side_count[4]++;
+                            break;
+
+                        case 6:
+                            side_count[5]++;
+                            break;
+
+                        default:
+                    }
+                }
+
+                for (var i = 0; i < side_count.length; i++) {
+                    if (side_count[i] == 5) {
+                        //nagy póker => 8
+                        score = 120;
+                    }else if (side_count[1] == 1 && side_count[2] == 1 && side_count[3] == 1 && side_count[4] == 1 && side_count[5] == 1) {
+                        //nagy sor => 7
+                        score = 110;
+                    }else if (side_count[0] == 1 && side_count[1] == 1 && side_count[2] == 1 && side_count[3] == 1 && side_count[4] == 1) {
+                        //kis sor => 6
+                        score = 100;
+                        score += (i + 1) * 4;
+                    }else if (side_count[i] == 4) {
+                        //kis póker => 4
+                        score = 50;
+                    }else if (side_count[i] == 3) {
+                        //drill => 3
+                        score = 30;
+                        score += (i + 1) * 3;
+                        has_drill = true;
+                        drill = i;
+                    }else if (side_count[i] == 2) {
+                        //pár => 1          dupla pár => 2
+                        score += ((i + 1) * 2);
+                        has_pair = true;
+                        pair = i;
+                    }
+
+                    if (has_pair && has_drill) {
+                        //full (pár + drill) => 5
+                        score = 70;
+                        score += ((pair + 1) * 2) + ((drill + 1) * 3);
+                        has_pair = false;
+                        has_drill = false;
+                        pair = null;
+                        drill = null;
+                    }
+                }
+                console.log(score);
+                return score;
+            }
+
+            function roll_user(){
+                document.getElementById("roll_button").innerHTML = "Kör vége";
+                if (rolls < 3) {
+                    for (var i = 0; i < 5; i++) {
+                        if (users_roll_again[i] == 1) {
+                            var random_number = Math.round(Math.random() * 5) + 1;
+                            users_roll[i] = random_number;
+                            users_roll_again[i] = 0;
+                            document.getElementById(i).src = users_roll[i] + ".png";
+                        }
+                    }
+                    document.getElementById("user").style.display = "flex";
+                    users_score = count_score(users_roll);
+                    roll_enemy();
+                }
+
+                rolls++;
+
+                if (rolls == 3) {
+                    document.getElementById("roll_button").style.display = "none";
+                    if (users_score > enemys_score) {
+                        document.getElementById("winner").innerHTML = "Tiéd a győzelem!";
+                    } else {
+                        document.getElementById("winner").innerHTML = "Kikaptál komám!";
+                    }
+                    document.getElementById("menu").style.display = "table";
+                }
+            }
+
+            function enemy_AI(){
+                var has_pair = false;
+                var pair;
+                var has_drill = false;
+                var drill;
+                var has_s_poker = false;
+                var has_s_row = false;
+                var has_b_row = false;
+                var has_b_poker = false;
+                var side_count = [0, 0, 0, 0, 0, 0];
+
+                for (var i = 0; i < enemys_roll.length; i++) {
+                    switch (enemys_roll[i]) {
+                        case 1:
+                            side_count[0]++;
+                            break;
+
+                        case 2:
+                            side_count[1]++;
+                            break;
+
+                        case 3:
+                            side_count[2]++;
+                            break;
+
+                        case 4:
+                            side_count[3]++;
+                            break;
+
+                        case 5:
+                            side_count[4]++;
+                            break;
+
+                        case 6:
+                            side_count[5]++;
+                            break;
+
+                        default:
+                    }
+                }
+
+                for (var i = 0; i < side_count.length; i++) {
+                    if (side_count[i] == 5) {
+                        //nagy póker => 8
+                        has_b_poker = true;
+                    }else if (side_count[1] == 1 && side_count[2] == 1 && side_count[3] == 1 && side_count[4] == 1 && side_count[5] == 1) {
+                        //nagy sor => 7
+                        has_b_row = true;
+                    }else if (side_count[0] == 1 && side_count[1] == 1 && side_count[2] == 1 && side_count[3] == 1 && side_count[4] == 1) {
+                        //kis sor => 6
+                        has_s_row = true;
+                    }else if (side_count[i] == 4) {
+                        //kis póker => 4
+                        has_s_poker = true;
+                    }else if (side_count[i] == 3) {
+                        //drill => 3
+                        has_drill = true;
+                        drill = i;
+                    }else if (side_count[i] == 2) {
+                        //pár => 1          dupla pár => 2
+                        has_pair = true;
+                        pair = i;
+                    }
+                }
+
+                if (!has_s_poker && !has_s_row && !has_b_row && !has_b_poker) {
+                    for (var i = 0; i < side_count.length; i++) {
+                        if (side_count[i] < 2) {
+                            for (var j = 0; j < enemys_roll.length; j++) {
+                                if (enemys_roll[j] == (i + 1)) {
+                                    enemys_roll_again[j] = 1;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            function roll_enemy(){
+                enemy_AI();
+                for (var i = 0; i < 5; i++) {
+                    if (enemys_roll_again[i] == 1) {
+                        var random_number = Math.round(Math.random() * 5) + 1;
+                        enemys_roll[i] = random_number;
+                        enemys_roll_again[i] = 0;
+                        document.getElementById("E" + i).src = enemys_roll[i] + ".png";
+                    }
+                }
+                document.getElementById("enemy").style.display = "flex";
+                enemys_score = count_score(enemys_roll);
+            }
+
+            function select_for_reroll(id){
+                var path = document.getElementById(id).src
+                path = path.substr(path.lastIndexOf("/")+1);
+                if (path == "1.png" ||
+                path == "2.png" ||
+                path == "3.png" ||
+                path == "4.png" ||
+                path == "5.png" ||
+                path == "6.png") {
+                    document.getElementById(id).src = "selected_" + path;
+                    users_roll_again[id] = 1;
+                }else {
+                    document.getElementById(id).src = path.substr(path.lastIndexOf("_")+1);
+                    users_roll_again[id] = 0;
+                }
+            }
+
+            function show_help(){
+                document.getElementById("help").title = "pár - két egyforma érték\n" +
+                                                        "drill - három egyforma érték\n" +
+                                                        "2 pár - két különböző értékből két-két egyforma érték\n" +
+                                                        "kis póker - négy egyforma érték\n" +
+                                                        "full - egy pár és egy drill\n" +
+                                                        "Kis sor - 1, 2, 3, 4, 5-ös értékek\n" +
+                                                        "Nagy sor - 2, 3, 4, 5, 6-os értékek\n" +
+                                                        "nagy póker - öt egyforma érték";
+            }
+        </script>
+    </body>
+</html>

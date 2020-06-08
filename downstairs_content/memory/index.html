@@ -1,0 +1,284 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Mgame</title>
+        <meta charset="utf-8">
+        <style>
+            body{
+                background-color: dimgrey;
+                background-image: url("table.png");
+                background-size: cover;
+            }
+
+            #back{
+                width: 180px;
+                position: absolute;
+                top: 3%;
+                left: 3%;
+            }
+
+            #menu{
+                display: block;
+                width: 200px;
+                position: absolute;
+                left: 44vw;
+                background-color: rgba(155, 150, 100, 1);
+                border-radius: 10px;
+                border-style: solid;
+                text-align: center;
+                padding: 5px;
+                margin-top: 5vh;
+            }
+
+            #card_board{
+                width: 99vw;
+                display: none;
+            }
+
+            #win{
+                display: none;
+                margin-top: 40px;
+                margin-left: 40px;
+            }
+
+            #menu{
+                text-align: center;
+                padding-top: 25px;
+            }
+
+            #presentation{
+                display: block;
+                width: 90vw;
+                position: absolute;
+                bottom: 1vh;
+                left: 7.5vw;
+            }
+
+            h1{
+                text-align: center;
+            }
+
+            .presentation_card{
+                width: 9vw;
+                /*height: 9vw;*/
+                margin: 0.1vw;
+            }
+
+            .row{
+                width: inherit;
+                justify-content: center;
+                display: flex;
+            }
+
+            .card{
+                width: 9vw;
+                height: 9vw;
+                margin: 5px;
+            }
+
+            #pairs_left{
+                padding: 0px;
+                margin-top: 40px;
+                margin-right: 40px;
+                margin-bottom: 0px;
+                text-align: right;
+                font-size: 50px;
+                font-family: cursive;
+            }
+        </style>
+    </head>
+
+    <body>
+        <a href="../.."><img id="back" src="exit.png" /></a>
+
+        <section id="menu">
+            Olyan hiper-szuper memória játék, hogy megeszed az uzsonnád!<br />
+            <section id="win">
+                <h1>Nyertél tesó!</h1>
+                <h3>Új kört?</h3>
+            </section>
+
+            <button onclick="generate_cards()">START!</button>
+        </section>
+
+        <section id="presentation">
+            <h1>A kártyák:</h1>
+            <a href="00.png" target="_blank"><img class="presentation_card" src="00.png" /></a>
+            <a href="01.png" target="_blank"><img class="presentation_card" src="01.png" /></a>
+            <a href="02.png" target="_blank"><img class="presentation_card" src="02.png" /></a>
+            <a href="03.png" target="_blank"><img class="presentation_card" src="03.png" /></a>
+            <a href="04.png" target="_blank"><img class="presentation_card" src="04.png" /></a>
+            <a href="05.png" target="_blank"><img class="presentation_card" src="05.png" /></a>
+            <a href="06.png" target="_blank"><img class="presentation_card" src="06.png" /></a>
+            <a href="07.png" target="_blank"><img class="presentation_card" src="07.png" /></a>
+            <a href="08.png" target="_blank"><img class="presentation_card" src="08.png" /></a>
+            <a href="09.png" target="_blank"><img class="presentation_card" src="09.png" /></a>
+            <a href="10.png" target="_blank"><img class="presentation_card" src="10.png" /></a>
+            <a href="11.png" target="_blank"><img class="presentation_card" src="11.png" /></a>
+            <a href="12.png" target="_blank"><img class="presentation_card" src="12.png" /></a>
+            <a href="13.png" target="_blank"><img class="presentation_card" src="13.png" /></a>
+            <a href="14.png" target="_blank"><img class="presentation_card" src="14.png" /></a>
+            <a href="15.png" target="_blank"><img class="presentation_card" src="15.png" /></a>
+            <a href="16.png" target="_blank"><img class="presentation_card" src="16.png" /></a>
+            <a href="17.png" target="_blank"><img class="presentation_card" src="17.png" /></a>
+        </section>
+
+        <section id="card_board">
+            <p id="pairs_left"></p>
+
+            <section class="row">
+                <img id="00" class="card" onclick="turn(id)" src="token_back.png" />
+                <img id="01" class="card" onclick="turn(id)" src="token_back.png" />
+                <img id="02" class="card" onclick="turn(id)" src="token_back.png" />
+                <img id="03" class="card" onclick="turn(id)" src="token_back.png" />
+                <img id="04" class="card" onclick="turn(id)" src="token_back.png" />
+                <img id="05" class="card" onclick="turn(id)" src="token_back.png" />
+                <img id="06" class="card" onclick="turn(id)" src="token_back.png" />
+                <img id="07" class="card" onclick="turn(id)" src="token_back.png" />
+                <img id="08" class="card" onclick="turn(id)" src="token_back.png" />
+            </section>
+
+            <section class="row">
+                <img id="09" class="card" onclick="turn(id)" src="token_back.png" />
+                <img id="10" class="card" onclick="turn(id)" src="token_back.png" />
+                <img id="11" class="card" onclick="turn(id)" src="token_back.png" />
+                <img id="12" class="card" onclick="turn(id)" src="token_back.png" />
+                <img id="13" class="card" onclick="turn(id)" src="token_back.png" />
+                <img id="14" class="card" onclick="turn(id)" src="token_back.png" />
+                <img id="15" class="card" onclick="turn(id)" src="token_back.png" />
+                <img id="16" class="card" onclick="turn(id)" src="token_back.png" />
+                <img id="17" class="card" onclick="turn(id)" src="token_back.png" />
+            </section>
+
+            <section class="row">
+                <img id="18" class="card" onclick="turn(id)" src="token_back.png" />
+                <img id="19" class="card" onclick="turn(id)" src="token_back.png" />
+                <img id="20" class="card" onclick="turn(id)" src="token_back.png" />
+                <img id="21" class="card" onclick="turn(id)" src="token_back.png" />
+                <img id="22" class="card" onclick="turn(id)" src="token_back.png" />
+                <img id="23" class="card" onclick="turn(id)" src="token_back.png" />
+                <img id="24" class="card" onclick="turn(id)" src="token_back.png" />
+                <img id="25" class="card" onclick="turn(id)" src="token_back.png" />
+                <img id="26" class="card" onclick="turn(id)" src="token_back.png" />
+            </section>
+
+            <section class="row">
+                <img id="27" class="card" onclick="turn(id)" src="token_back.png" />
+                <img id="28" class="card" onclick="turn(id)" src="token_back.png" />
+                <img id="29" class="card" onclick="turn(id)" src="token_back.png" />
+                <img id="30" class="card" onclick="turn(id)" src="token_back.png" />
+                <img id="31" class="card" onclick="turn(id)" src="token_back.png" />
+                <img id="32" class="card" onclick="turn(id)" src="token_back.png" />
+                <img id="33" class="card" onclick="turn(id)" src="token_back.png" />
+                <img id="34" class="card" onclick="turn(id)" src="token_back.png" />
+                <img id="35" class="card" onclick="turn(id)" src="token_back.png" />
+            </section>
+        </section>
+
+        <script>
+            var card_places = [];
+            var turned = 0;
+            var pressed1;
+            var pressed2;
+            var pressed1_id;
+            var pressed2_id;
+            var pairs_left = 18;
+
+            function generate_cards(){
+                document.getElementById("menu").style.display = "none";
+                document.getElementById("presentation").style.display = "none";
+                document.getElementById("card_board").style.display = "block";
+                card_places = [];
+                turned = 0;
+                pairs_left = 18;
+                for (var index = 0; index < 18; index++) {
+                    if (card_places[index] == undefined) {
+                        var generated_number = Math.round(Math.random() * 17);
+                        while (card_places.includes(generated_number)) { //anti number repeat loop
+                            generated_number = Math.round(Math.random() * 17);
+                        }
+                        card_places[index] = generated_number;
+
+                        var index1 = 18 + (Math.round(Math.random() * 17));
+
+                        while (card_places[index1] != generated_number) {
+                            if (card_places[index1] == undefined) {
+                                card_places[index1] = generated_number;
+                            }else{
+                                var index1 = 18 +  (Math.round(Math.random() * 17));
+                            }
+                        }
+                    }
+                }
+                var card_elements = document.getElementsByClassName("card");
+                for (var i = 0; i < card_elements.length; i++) {
+                    card_elements[i].setAttribute("onclick", "turn(id)");
+                    card_elements[i].src= "token_back.png";
+                }
+                document.getElementById("pairs_left").innerHTML = pairs_left + "&nbsp;&nbsp;&nbsp;&nbsp;";
+
+            }
+
+            function turn_down(){
+                for (var i = 0; i < 36; i++) {
+                    if (card_places[i] != "f") {
+                        if(i < 10){
+                            document.getElementById("0" + i).src= "token_back.png";
+                        }else{
+                            document.getElementById(i).src= "token_back.png";
+                        }
+                    }
+                    turned = 0;
+                    pressed1 = undefined;
+                    pressed2 = undefined;
+                }
+            }
+
+            function turn(id){
+                var condition = document.getElementById(id).src
+                condition = condition.substr(condition.lastIndexOf("/")+1);
+
+
+                if(condition != "token_back.png"){//if not card back, change to card back
+                    document.getElementById(id).src= "token_back.png";
+                    turned--;
+                }else{
+                    if(card_places[parseInt(id)] < 10) {//if the card value 1, 2, 3... put a "0" before
+                        document.getElementById(id).src= "0" + card_places[parseInt(id)] + ".png";
+                    }else{
+                        document.getElementById(id).src= card_places[parseInt(id)] + ".png";
+                    }
+                    turned++;
+                }
+
+                if(pressed1 == undefined){
+                    pressed1 = card_places[parseInt(id)];
+                    pressed1_id = id;
+                }else{
+                    pressed2 = card_places[parseInt(id)];
+                    pressed2_id = id;
+                }
+
+                if(turned >= 2){
+                    if(pressed1 == pressed2){
+                        document.getElementById(pressed1_id).removeAttribute("onclick");
+                        card_places[parseInt(pressed1_id)] = "f";
+                        document.getElementById(pressed2_id).removeAttribute("onclick");
+                        card_places[parseInt(pressed2_id)] = "f";
+                        pairs_left--;
+                        turned = 0;
+                        pressed1 = undefined;
+                        pressed2 = undefined;
+                        if(pairs_left <= 0){
+                            document.getElementById("menu").style.display = "block";
+                            document.getElementById("win").style.display = "inline";
+                        }
+                    }else{
+                        setTimeout(turn_down, 700);
+                    }
+                }
+                document.getElementById("pairs_left").innerHTML = pairs_left + "&nbsp;&nbsp;&nbsp;&nbsp;";
+            }
+        </script>
+    </body>
+</html>

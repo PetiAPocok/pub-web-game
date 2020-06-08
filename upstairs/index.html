@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+		<meta charset="utf-8">
+		<title>Pub-fun</title>
+		<style>
+            body{
+				background-color: black;
+                text-align: center;
+                margin: 0px;
+                padding: 0px;
+			}
+
+			#main_container{
+                margin: 0px;
+                padding: 0px;
+				position: relative;
+			}
+
+			#bg{
+				z-index: -1;
+                width: 99vw;
+
+			}
+
+            #downstairs{
+                position: absolute;
+                top: 41.5%;
+                left: 23.8%;
+                width: 26%;
+            }
+
+            #gallery{
+                position: absolute;
+                top: 17%;
+                left: 30%;
+                width: 13%;
+            }
+
+            #color_mixer{
+                position: absolute;
+                bottom: 10%;
+                left: 10%;
+                width: 20%;
+            }
+
+            #dart_board{
+                position: absolute;
+                top: 16%;
+                right: 30%;
+                width: 11%;
+            }
+
+        </style>
+    </head>
+
+    <body>
+        <article id="main_container">
+            <img id="bg" src="upstairs_resources/upstairs.png" />
+            <img id="gallery" src="upstairs_resources/art.png" />
+
+            <a href=".."><img id="downstairs" src="upstairs_resources/downstairs.png" /></a>
+
+            <a href="upstairs_content/color_mixer/"><img id="color_mixer" src="upstairs_resources/color_mix.png" onmouseover="src='upstairs_resources/color_mix_alt.png'" onmouseout="src='upstairs_resources/color_mix.png'" /></a>
+            <img id="dart_board" src="upstairs_resources/dart_board.png" />
+        </article>
+    </body>
+</html>
